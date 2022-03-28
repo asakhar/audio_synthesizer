@@ -1,0 +1,7 @@
+/target
+.ipynb_checkpoints
+.vscode
+**.bk
+recv.ipynb
+output.bin
+kbd
