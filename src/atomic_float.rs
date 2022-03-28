@@ -190,6 +190,19 @@ impl AtomicState {
     self.cell.store(state)
   }
 
+  fn get_value(&self, state: State) -> f32 {
+    match state {
+      State::Attack(val) => val,
+      State::Decay(val) => val,
+      State::Sustain => self.sustain_level,
+      State::Release(val) => val,
+      State::Silent => 0.0,
+    }
+  }
+
+  pub fn peek(&self) -> f32 {
+    self.get_value(self.cell.load())
+  }
   pub fn next(&self) -> f32 {
     use State::*;
     let update = |old| {
@@ -220,13 +233,7 @@ impl AtomicState {
       })
     };
     if let Ok(old) = self.cell.fetch_update(update) {
-      match old {
-        State::Attack(val) => val,
-        State::Decay(val) => val,
-        State::Sustain => self.sustain_level,
-        State::Release(val) => val,
-        State::Silent => 0.0,
-      }
+      self.get_value(old)
     } else {
       unreachable!();
     }

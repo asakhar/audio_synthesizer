@@ -223,9 +223,9 @@ where
       State::Silent,
       0.98,
       0.0005,
-      0.002,
-      0.75,
-      0.00004
+      0.00002,
+      0.01,
+      0.00002
     );
     23
   ]);
@@ -270,17 +270,19 @@ where
     let key = hook.read();
     match key.unwrap() {
       highrow if highrow >= 16 && highrow <= 27 => {
+        let peeked = notes[(highrow - 16) as usize].peek();
         notes[(highrow - 16) as usize].set(if key.is_pressed() {
-          State::Attack(0.)
+          State::Attack(peeked)
         } else {
-          State::Release(0.7)
+          State::Release(peeked)
         })
       }
       middlerow if middlerow >= 30 && middlerow <= 40 => {
+        let peeked = notes[(middlerow - 30 + 12) as usize].peek();
         notes[(middlerow - 30 + 12) as usize].set(if key.is_pressed() {
-          State::Attack(0.)
+          State::Attack(peeked)
         } else {
-          State::Release(0.7)
+          State::Release(peeked)
         })
       }
       key if key == 44 => {
